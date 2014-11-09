@@ -13,9 +13,7 @@ import gevent
 from flask import Flask, render_template
 from flask_sockets import Sockets
 
-#REDIS_URL = os.environ['REDISCLOUD_URL']
-REDIS_URL = '127.0.0.1:6379'
-REDIS_CHAN = 'chat'
+from constants import REDIS_URL,REDIS_CHANNEL
 
 app = Flask(__name__)
 app.debug = 'DEBUG' in os.environ
@@ -24,7 +22,7 @@ sockets = Sockets(app)
 myredis = redis.from_url(REDIS_URL)
 
 from ChatBackend import ChatBackend
-chats = ChatBackend(myredis,REDIS_CHAN,gevent,app)
+chats = ChatBackend(myredis,REDIS_CHANNEL,gevent,app)
 chats.start()
 
 @app.route('/')
@@ -43,7 +41,7 @@ def inbox(ws):
 
         if message:
             app.logger.info(u'Inserting message: {}'.format(message))
-            myredis.publish(REDIS_CHAN, message)
+            myredis.publish(REDIS_CHANNEL, message)
 
 
 @sockets.route('/receive')
