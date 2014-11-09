@@ -16,7 +16,7 @@ from flask_sockets import Sockets
 from constants import REDIS_URL,REDIS_CHANNEL
 
 app = Flask(__name__)
-app.debug = 'DEBUG' in os.environ
+#app.debug = 'DEBUG' in os.environ
 
 sockets = Sockets(app)
 myredis = redis.from_url(REDIS_URL)
